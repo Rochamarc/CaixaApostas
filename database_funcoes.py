@@ -6,6 +6,7 @@ conn = sqlite3.connect('data.db')
 c = conn.cursor()
 data_atual = datetime.now()
 
+""" Funções de inserção no banco de dados """
 def insere_jogos_feitos(n_sorteio,bilhete,data=data_atual,connector=conn,cursor=c):
 	dados = [(n_sorteio,bilhete,data),]
 	cursor.executemany("INSERT INTO jogos_feitos VALUES (?,?,?)",dados)
@@ -30,21 +31,38 @@ def insere_premio(n_sorteio,valor_total_premio,valor_20,valor_19,valor_18,valor_
 	print("Dados inseridos em premios com sucesso!")
 	connector.commit()
 
+def insere_sorteio(n_sorteio,sorteio,cursor=c):
+	cursor.execute("SELECT valor_total_premio FROM premios_valor WHERE n_sorteio=?",(n_sorteio,))
+	valor_premio = cursor.fetchall()
+	dados = [(n_sorteio,sorteio,valor_premio)]
+	cursor.executemany("INSERT INTO bilhete_premiado VALUES (?,?,?)",dados)
+	print("Dados inseridos em bilhete_premiado com sucesso!")
+
 def devolve_acumulo():
 	return aculumo
 
+""" Funções de leitura do banco de dados """
 def seleciona_ganhadores(n_sorteio,cursor=c):
 	#seleciona os ganhadores da tabela numero sorteio
 	cursor.execute(" SELECT * FROM jogos_ganhos WHERE n_sorteio=?; ",(n_sorteio,))
-	print('Tabelas:')
 	data = []
 	headers = ['Sorteio','Bilhete','Pontos']
 	for tabela in cursor.fetchall():
     		data.append(tabela)
 	print(tabulate(data,headers))
 
+def seleciona_n_jogadores(n_sorteio,cursor=c):
+	cursor.execute("SELECT * FROM jogos_feitos WHERE n_sorteio=?",(n_sorteio,))
+	cont = 0
+	for tabela in cursor.fetchall():
+		cont += 1
+	print("%i jogos feitos." %(cont))
+	return cont
+
+""" Função de fechamento do banco de dados """
 def close_database(connector=conn):
 	connector.close()
 
+#Teste, só funcionam quando este codigo for diretamente executado
 if __name__ == "__main__":
 	seleciona_ganhadores(5)
