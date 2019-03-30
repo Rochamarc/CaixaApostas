@@ -1,11 +1,10 @@
-from database_funcoes import seleciona_n_jogadores,close_database,insere_premio
+from database_funcoes import seleciona_n_jogadores,close_database,insere_premio,insere_sorteio
 from random import randint
 from gera_bilhete import gera_premio
 
 #Determina o valor dos premios
-def determina_premio():
+def contagem_jogos_feitos(n_sorteio):
     
-    n_sorteio = int(input("Digite o valor do sorteio: "))
     #valor de acumulo a ser testado
     premio_acumulado = randint(500,2500000)
     try:
@@ -35,9 +34,38 @@ def determina_premio():
     #inserindo valores no banco de dados
     insere_premio(n_sorteio,valor_total_insere,valor_20,valor_19,valor_18,valor_17,valor_16,valor_15,valor_0)
 
-def confere_jogos():
-    """ Conferir quais jogos foram ganhos e inserir na tabela de ganhadores """
+#Determina sorteio e o valor do premio
+def determina_premio(n_sorteio):
+    sorteio = gera_premio(20)
+    insere_sorteio(n_sorteio,str(sorteio))
+    print("Sorteio executado com sucesso!")
+
+def confere_jogos(n_sorteio):
     pass
 
-determina_premio()
-close_database()
+while True:
+    print("""
+                                ##################################
+                                        CENTRAL DE APOSTAS
+                                ##################################
+                                     SE SENTINDO SORTUDO HOJE?
+
+
+                                [ 1 ] - Contar o número de jogadores
+                                [ 2 ] - Conferir os ganhadores
+                                [ 3 ] - Visualizar o valor dos premios
+                                [ 4 ] - Sortear os numeros ganhadores
+    """)
+    opcao = int(input("                             --->. "))
+    if opcao == 1:
+        n_sorteio = int(input("                         Digite o número do sorteio: "))
+        contagem_jogos_feitos(n_sorteio)
+    elif opcao == 4:
+        n_sorteio = int(input("                         Digite o número do sorteio: "))
+        determina_premio(n_sorteio)
+    elif funcao == 5:
+        print("Fechando banco de dados...")
+        close_database()
+        print("Até a próxima!!!")
+        exit()
+
