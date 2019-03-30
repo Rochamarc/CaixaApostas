@@ -1,22 +1,27 @@
 from gera_bilhete import confere_bilhete,gera_premio
 from datetime import datetime
-from database_salvando import insere_jogos_feitos, insere_jogos_ganhos, insere_ganhadores, insere_premio
+from database_funcoes import insere_jogos_feitos, insere_jogos_ganhos, insere_ganhadores, insere_premio,close_database
+from random import randint
 
+#Gera o bilhete premiado de 20 digitos
 sorteio = gera_premio(20)
-print("")
-print(sorteio)
-print("")
+print("\n",sorteio,"\n")
 seguir = input("Tecle enter para continuar:")
 arquivo_txt = ("docs/%s.txt" %(datetime.now()))
+#cria um documentos de ganhadores acima de quinze pontos por precaução
+#perigo, falha de segurança terrivel
 document = open(arquivo_txt,'w')
-
+#define o numero do sorteio
 n_sorteio = int(input("Digite o numero do sorteio: "))
 valor_total_premio = 0
 #valor de acumulo a ser testado
-acumulo = 1500000.00
+acumulo = randint(500,2500000)
+#numero aleatorio de apostadores
+apostadores = randint(500,10000)
 
-for i in range(100):
+for i in range(apostadores):
     
+    #valor unitario pago pelas apostas
     valor_total_premio += 1.50
     print("")
     jogo = ("JOGO NUMERO: %i" %i)
@@ -57,3 +62,4 @@ valor_devolvido -= valor_16
 valor_15 = valor_devolvido
 #inserindo valores no banco de dados
 insere_premio(n_sorteio,valor_total_insere,valor_20,valor_19,valor_18,valor_17,valor_16,valor_15,valor_0)
+close_database()
