@@ -31,12 +31,14 @@ def insere_premio(n_sorteio,valor_total_premio,valor_20,valor_19,valor_18,valor_
 	print("Dados inseridos em premios com sucesso!")
 	connector.commit()
 
-def insere_sorteio(n_sorteio,sorteio,cursor=c):
+def insere_sorteio(n_sorteio,sorteio,connector=conn,cursor=c):
 	cursor.execute("SELECT valor_total_premio FROM premios_valor WHERE n_sorteio=?",(n_sorteio,))
-	valor_premio = cursor.fetchall()
-	dados = [(n_sorteio,sorteio,valor_premio)]
+	valor_premio = cursor.fetchall()[-1]
+	for i in valor_premio:
+		dados = [(n_sorteio,sorteio,i),]
 	cursor.executemany("INSERT INTO bilhete_premiado VALUES (?,?,?)",dados)
 	print("Dados inseridos em bilhete_premiado com sucesso!")
+	connector.commit()
 
 def devolve_acumulo():
 	return aculumo
@@ -51,6 +53,8 @@ def seleciona_ganhadores(n_sorteio,cursor=c):
     		data.append(tabela)
 	print(tabulate(data,headers))
 
+""" Funções de leitura e retorno """
+#Seleciona a tabela jogos_feitos e determina o numero de jogadores 
 def seleciona_n_jogadores(n_sorteio,cursor=c):
 	cursor.execute("SELECT * FROM jogos_feitos WHERE n_sorteio=?",(n_sorteio,))
 	cont = 0
@@ -59,10 +63,14 @@ def seleciona_n_jogadores(n_sorteio,cursor=c):
 	print("%i jogos feitos." %(cont))
 	return cont
 
+def retorna_jogadores(n_sorteio,cursor=c):
+	cursor.execute("SELECT * FROM jogos_feitos WHERE n_sorteio=?",(n_sorteio,))
+	return cursor.fetchall()
+
 """ Função de fechamento do banco de dados """
 def close_database(connector=conn):
 	connector.close()
 
 #Teste, só funcionam quando este codigo for diretamente executado
 if __name__ == "__main__":
-	seleciona_ganhadores(5)
+	pass
