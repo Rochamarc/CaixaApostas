@@ -1,6 +1,6 @@
-from database_funcoes import seleciona_n_jogadores,close_database,insere_premio,insere_sorteio
+from database_funcoes import insere_jogos_ganhos,seleciona_n_jogadores,close_database,insere_premio,insere_sorteio, retorna_bilhetes_jogados ,retorna_bilhete_premiado
 from random import randint
-from gera_bilhete import gera_premio
+from gera_bilhete import gera_premio,confere_bilhete
 
 #Determina o valor dos premios
 def contagem_jogos_feitos(n_sorteio):
@@ -16,7 +16,7 @@ def contagem_jogos_feitos(n_sorteio):
     valor_devolvido = (jogadores * 1.50) * 0.46 + premio_acumulado 
     valor_total_premio = 0
 
-    #Calcula o valor dos premios e insere no banco de dados
+    #Calcula o valor dos premios
     valor_total_insere = valor_devolvido
     valor_20 = valor_devolvido * 0.28
     valor_devolvido -= valor_20
@@ -40,9 +40,39 @@ def determina_premio(n_sorteio):
     insere_sorteio(n_sorteio,str(sorteio))
     print("Sorteio executado com sucesso!")
 
+def organizando_ganhadores(n_sorteio):
+    """ 
+            Duas seleções nos banco de dados, 
+    Primeira seleção - bilhete_premiado --> bilhete = list(bilhete)
+    Segunda seleção - jogos_feitos --> bilhete = list(bilhete)
+    Sera criado uma cadeia de if para gerar os ganhos e
+    serão inseridos no banco de dados jogos_ganhos os ganhadores
+    """
+    bilhete_premiado = retorna_bilhete_premiado(n_sorteio)
+    bilhetes_jogados = retorna_bilhetes_jogados(n_sorteio)
+    cont = 0 #teste
+    for i in bilhetes_jogados:
+        cont += 1 #teste
+        bilhete = i[0]
+        print(bilhete)
+        print(bilhete_premiado)
+        acertos = confere_bilhete(bilhete_premiado,bilhete)
+        print(acertos)
+        if acertos >= 15 or acertos == 0:
+            #teste
+            print(cont)
+            insere_jogos_ganhos(n_sorteio,str(bilhete),str(bilhete_premiado),acertos)
+        """ ERROR """
+        
 def confere_jogos(n_sorteio):
+    """
+    Seleciona no banco de dados jogos_ganhos, e os organize em dos ganhadores do 15 ao 0
+    depois obtenha os valores de cada ramo ganhado e divida entre os ganhadores 
+    e salve no banco de dados ganhadores com seus respectivos premios
+    caso algum ramo não possua ganhador, o valor e será acumulado para o proximo jogo
+    """
     pass
-
+    
 while True:
     print("""
                                 ##################################
@@ -55,6 +85,8 @@ while True:
                                 [ 2 ] - Conferir os ganhadores
                                 [ 3 ] - Visualizar o valor dos premios
                                 [ 4 ] - Sortear os numeros ganhadores
+                                [ 5 ] - Organizar os vencedores
+                                [ 6 ] - Sair
     """)
     opcao = int(input("                             --->. "))
     if opcao == 1:
@@ -63,7 +95,10 @@ while True:
     elif opcao == 4:
         n_sorteio = int(input("                         Digite o número do sorteio: "))
         determina_premio(n_sorteio)
-    elif funcao == 5:
+    elif opcao == 5:
+        n_sorteio = int(input("                         Digite o número do sorteio: "))
+        organizando_ganhadores(n_sorteio)
+    elif opcao == 6:
         print("Fechando banco de dados...")
         close_database()
         print("Até a próxima!!!")

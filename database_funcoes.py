@@ -63,9 +63,24 @@ def seleciona_n_jogadores(n_sorteio,cursor=c):
 	print("%i jogos feitos." %(cont))
 	return cont
 
-def retorna_jogadores(n_sorteio,cursor=c):
-	cursor.execute("SELECT * FROM jogos_feitos WHERE n_sorteio=?",(n_sorteio,))
-	return cursor.fetchall()
+#retorna o bilhete premiado como lista
+def retorna_bilhete_premiado(n_sorteio,cursor=c):
+	#Executa a selecao
+	cursor.execute("SELECT bilhete FROM bilhete_premiado WHERE n_sorteio=?",(n_sorteio,))
+	#seleciona o único bilhete no banco de dados
+	bilhete_premiado = cursor.fetchall()[0][0]
+	return bilhete_premiado
+
+def retorna_bilhetes_jogados(n_sorteio,cursor=c):
+	cursor.execute("SELECT bilhete FROM jogos_feitos WHERE n_sorteio=?",(n_sorteio,))
+	#lista com todos os bilhetes de jogadores 
+	bilhete_jogador =  cursor.fetchall()
+	return list(bilhete_jogador)
+	"""
+	sintaxe 
+	exemplo = retorna_jogadores(0)
+	exemplo[0][0] -> seleciona a o list(bilhete) de todo o list(jogos_feitos)
+	"""
 
 """ Função de fechamento do banco de dados """
 def close_database(connector=conn):

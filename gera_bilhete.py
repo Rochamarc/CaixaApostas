@@ -17,9 +17,9 @@ def gera_premio(extension):
         sorteio.sort()
     return sorteio
 
-def confere_bilhete(sorteio,bilhete):
+def confere_bilhete(bilhete_sorteado,bilhete):
     acertos = 0
-    for i in sorteio:
+    for i in bilhete_sorteado:
         if i in bilhete:
             acertos += 1
     return acertos
