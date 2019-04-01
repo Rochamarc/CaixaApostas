@@ -8,7 +8,7 @@ n_sorteio = int(input("Digite o numero do sorteio: "))
 #numero aleatorio de apostadores
 apostadores = randint(500,10000)
 
-for i in range(apostadores):
+for i in range(100000):
     
     print("")
     jogo = ("JOGO NUMERO: %i" %i)

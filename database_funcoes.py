@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
 from tabulate import tabulate
+import json
 
 conn = sqlite3.connect('data.db')
 c = conn.cursor()
@@ -31,14 +32,18 @@ def insere_premio(n_sorteio,valor_total_premio,valor_20,valor_19,valor_18,valor_
 	print("Dados inseridos em premios com sucesso!")
 	connector.commit()
 
+""" SELECIONA valor_total_premio E INSERE premios_valor """
 def insere_sorteio(n_sorteio,sorteio,connector=conn,cursor=c):
-	cursor.execute("SELECT valor_total_premio FROM premios_valor WHERE n_sorteio=?",(n_sorteio,))
-	valor_premio = cursor.fetchall()[-1]
-	for i in valor_premio:
-		dados = [(n_sorteio,sorteio,i),]
-	cursor.executemany("INSERT INTO bilhete_premiado VALUES (?,?,?)",dados)
-	print("Dados inseridos em bilhete_premiado com sucesso!")
-	connector.commit()
+	try:
+		cursor.execute("SELECT valor_total_premio FROM premios_valor WHERE n_sorteio=?",(n_sorteio,))
+		valor_premio = cursor.fetchall()[-1]
+		for i in valor_premio:
+			dados = [(n_sorteio,sorteio,i),]
+		cursor.executemany("INSERT INTO bilhete_premiado VALUES (?,?,?)",dados)
+		print("Dados inseridos em bilhete_premiado com sucesso!")
+		connector.commit()
+	except:
+		print("Não existe valores inseridos no banco de dados.")
 
 def devolve_acumulo():
 	return aculumo
@@ -63,6 +68,41 @@ def seleciona_n_jogadores(n_sorteio,cursor=c):
 	print("%i jogos feitos." %(cont))
 	return cont
 
+def retorna_dicionario_ganhadores(n_sorteio,cursor=c):
+	#Seleciona bilhete e pontos
+	cursor.execute("SELECT bilhete, pontos FROM jogos_ganhos WHERE n_sorteio=?",(n_sorteio,))
+	selecao = cursor.fetchall()
+	ganhadores = {
+		
+		0: [],
+		15: [],
+		16: [],
+		17: [],
+		18: [],
+		19: [],
+		20: []
+		
+	}
+	for i in selecao:
+		bilhete = json.loads(i[0])
+		#seleciona o ultimo elemente que são os pontos feitos
+		if i[1] == 15:
+			ganhadores[15].append(bilhete)
+		elif i[1] == 16:
+			ganhadores[16].append(bilhete)
+		elif i[1] == 17:
+			ganhadores[17].append(bilhete)
+		elif i[1] == 18:
+			ganhadores[18].append(bilhete)
+		elif i[1] == 19:
+			ganhadores[19].append(bilhete)
+		elif i[1] == 20:
+			ganhadores[20].append(bilhete)
+		elif i[1] == 0:
+			ganhadores[0].append(bilhete)
+	#Retorna a lista de vencedores
+	return ganhadores
+	
 #retorna o bilhete premiado como lista
 def retorna_bilhete_premiado(n_sorteio,cursor=c):
 	#Executa a selecao

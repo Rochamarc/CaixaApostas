@@ -1,6 +1,7 @@
-from database_funcoes import insere_jogos_ganhos,seleciona_n_jogadores,close_database,insere_premio,insere_sorteio, retorna_bilhetes_jogados ,retorna_bilhete_premiado
+from database_funcoes import *
 from random import randint
 from gera_bilhete import gera_premio,confere_bilhete
+import json 
 
 #Determina o valor dos premios
 def contagem_jogos_feitos(n_sorteio):
@@ -48,21 +49,17 @@ def organizando_ganhadores(n_sorteio):
     Sera criado uma cadeia de if para gerar os ganhos e
     serão inseridos no banco de dados jogos_ganhos os ganhadores
     """
-    bilhete_premiado = retorna_bilhete_premiado(n_sorteio)
+    bilhete_premiado = json.loads(retorna_bilhete_premiado(n_sorteio))
     bilhetes_jogados = retorna_bilhetes_jogados(n_sorteio)
     cont = 0 #teste
     for i in bilhetes_jogados:
         cont += 1 #teste
-        bilhete = i[0]
-        print(bilhete)
-        print(bilhete_premiado)
+        bilhete = json.loads(i[0])
         acertos = confere_bilhete(bilhete_premiado,bilhete)
-        print(acertos)
         if acertos >= 15 or acertos == 0:
-            #teste
-            print(cont)
+            #funcionando
             insere_jogos_ganhos(n_sorteio,str(bilhete),str(bilhete_premiado),acertos)
-        """ ERROR """
+        
         
 def confere_jogos(n_sorteio):
     """
@@ -71,7 +68,7 @@ def confere_jogos(n_sorteio):
     e salve no banco de dados ganhadores com seus respectivos premios
     caso algum ramo não possua ganhador, o valor e será acumulado para o proximo jogo
     """
-    pass
+    ganhadores = retorna_dicionario_ganhadores(n_sorteio)
     
 while True:
     print("""
