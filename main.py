@@ -1,6 +1,6 @@
 from database_funcoes import *
 from random import randint
-from gera_bilhete import gera_premio,confere_bilhete
+from gera_bilhete import GeradorDeBilhetes,ConferirBilhetes
 import json 
 
 #Determina o valor dos premios
@@ -14,7 +14,7 @@ def contagem_jogos_feitos(n_sorteio):
         print("O valor do sorteio não existe.")
         exit()
     
-    valor_devolvido = (jogadores * 1.50) * 0.46 + premio_acumulado 
+    valor_devolvido = (jogadores * 1.50) * 0.46 + premio_acumulado
     valor_total_premio = 0
 
     #Calcula o valor dos premios
@@ -37,7 +37,7 @@ def contagem_jogos_feitos(n_sorteio):
 
 #Determina sorteio e o valor do premio
 def determina_premio(n_sorteio):
-    sorteio = gera_premio(20)
+    sorteio = GeradorDeBilhetes(20).gera_bilhete()
     insere_sorteio(n_sorteio,str(sorteio))
     print("Sorteio executado com sucesso!")
 
@@ -49,7 +49,7 @@ def organizando_ganhadores(n_sorteio):
     Sera criado uma cadeia de if para gerar os ganhos e
     serão inseridos no banco de dados jogos_ganhos os ganhadores
     """
-    bilhete_premiado = json.loads(retorna_bilhete_premiado(n_sorteio))
+    bilhete_premiado = retorna_bilhete_premiado(n_sorteio)
     bilhetes_jogados = retorna_bilhetes_jogados(n_sorteio)
     cont = 0 #teste
     for i in bilhetes_jogados:

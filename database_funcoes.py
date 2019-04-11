@@ -32,6 +32,14 @@ def insere_premio(n_sorteio,valor_total_premio,valor_20,valor_19,valor_18,valor_
 	print("Dados inseridos em premios com sucesso!")
 	connector.commit()
 
+""" Atualiza a tabela premio """
+def update_premio(n_sorteio,valor_total_premio,valor_20,valor_19,valor_18,valor_17,valor_16,valor_15,valor_0,connector=conn,cursor=c):
+	cursor.executemany("""UPDATE premios_valor SET 
+	valor_total_premio = ? , valor_20 = ? , valor_19 = ? , valor_18 = ?,
+	valor_17 = ? , valor_16 = ? , valor_15 = ? , valor_0 = ? WHERE n_sorteio = ?
+	""",(valor_total_premio,valor_20,valor_19,valor_18,valor_17,valor_16,valor_15,valor_0,n_sorteio,))
+	connector.commit()
+
 """ SELECIONA valor_total_premio E INSERE premios_valor """
 def insere_sorteio(n_sorteio,sorteio,connector=conn,cursor=c):
 	try:
@@ -108,13 +116,13 @@ def retorna_bilhete_premiado(n_sorteio,cursor=c):
 	#Executa a selecao
 	cursor.execute("SELECT bilhete FROM bilhete_premiado WHERE n_sorteio=?",(n_sorteio,))
 	#seleciona o único bilhete no banco de dados
-	bilhete_premiado = cursor.fetchall()[0][0]
+	bilhete_premiado = json.loads(cursor.fetchall()[0][0])
 	return bilhete_premiado
 
 def retorna_bilhetes_jogados(n_sorteio,cursor=c):
 	cursor.execute("SELECT bilhete FROM jogos_feitos WHERE n_sorteio=?",(n_sorteio,))
 	#lista com todos os bilhetes de jogadores 
-	bilhete_jogador =  cursor.fetchall()
+	bilhete_jogador = cursor.fetchall()
 	return list(bilhete_jogador)
 	"""
 	sintaxe 

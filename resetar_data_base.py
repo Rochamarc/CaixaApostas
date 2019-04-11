@@ -8,6 +8,6 @@ c.execute("DELETE FROM ganhadores")
 c.execute("DELETE FROM jogos_feitos")
 c.execute("DELETE FROM jogos_ganhos")
 c.execute("DELETE FROM premios_valor")
-
+print("Banco de dados resetado com sucesso!")
 conn.commit()
 c.close()
