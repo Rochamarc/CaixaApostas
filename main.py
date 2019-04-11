@@ -2,7 +2,6 @@ from database_funcoes import *
 from random import randint
 from gera_bilhete import GeradorDeBilhetes,ConferirBilhetes
 import json 
-
 #Determina o valor dos premios
 def contagem_jogos_feitos(n_sorteio):
     
@@ -55,7 +54,7 @@ def organizando_ganhadores(n_sorteio):
     for i in bilhetes_jogados:
         cont += 1 #teste
         bilhete = json.loads(i[0])
-        acertos = confere_bilhete(bilhete_premiado,bilhete)
+        acertos = ConferirBilhetes(bilhete_premiado,i).retorna_acertos()
         if acertos >= 15 or acertos == 0:
             #funcionando
             insere_jogos_ganhos(n_sorteio,str(bilhete),str(bilhete_premiado),acertos)
