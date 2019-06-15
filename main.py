@@ -1,7 +1,8 @@
 from database_funcoes import *
 from random import randint
 from gera_bilhete import GeradorDeBilhetes,ConferirBilhetes
-import json 
+import json
+
 #Determina o valor dos premios
 def contagem_jogos_feitos(n_sorteio):
     

@@ -20,15 +20,13 @@ class ConferirBilhetes:
     def __init__(self,bilhete_premiado,bilhete_jogado):
         self.bilhete_premiado = bilhete_premiado
         self.bilhete_jogado = bilhete_jogado
-        
+
     def retorna_acertos(self):
-        __acertos = 0
+        self.acertos = 0
         for i in self.bilhete_premiado:
             if i in self.bilhete_jogado:
-                __acertos += 1
-        return __acertos
-
-
+                self.acertos += 1
+        return self.acertos
 def gera_bilhete():
     bilhete = []
     for i in range(100):

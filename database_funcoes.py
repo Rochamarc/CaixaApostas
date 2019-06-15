@@ -129,6 +129,10 @@ def retorna_bilhetes_jogados(n_sorteio,cursor=c):
 	exemplo = retorna_jogadores(0)
 	exemplo[0][0] -> seleciona a o list(bilhete) de todo o list(jogos_feitos)
 	"""
+def seleciona_jogos_feitos(cursor=c):
+	cursor.execute("SELECT * FROM jogos_feitos")
+	bilhete_jogos_feitos = cursor.fetchall()
+	return list(bilhete_jogos_feitos)
 
 """ Função de fechamento do banco de dados """
 def close_database(connector=conn):
