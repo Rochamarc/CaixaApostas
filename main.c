@@ -3,16 +3,18 @@
 #include <time.h>
 
 int main(){
+	// Variaveis para iniciar o tempo de execuçao
 	clock_t start, end;
 	double cpu_time_used;
 
-	start = clock();
+	start = clock(); // Inicia o relogio
 	//declarando variaveis
 	int segundos = time(0);
 	srand(segundos);
 	int bilhete[20];
 	int apostador[50];
 	
+	// Sorteio 
 	//cria os valores dentro do array
 	for (int i = 0; i < 20; i++){
 		int numero_aleatorio = rand() %100;
@@ -37,11 +39,13 @@ int main(){
 		}
 	}
 	
+	// Começa a criaçao dos jogos 
 	for(int z = 0; z < 1000000; z++){
 		int pontuacao = 0;
 		//Declara as rodadas
 		printf("Rodada: %d \n\n",z);
-
+		
+		// Aposta
 		for(int i = 0; i < 50; i++){
 			int numero_aleatorio = rand() %100;
 			apostador[i] = numero_aleatorio;
@@ -61,6 +65,7 @@ int main(){
 			}
 		}
 		
+		// Testa os numeros da aposta com os numeros do sorteio
 		for(int i = 0; i < 50; i++){
 			int valor_apostador = apostador[i];
 			for(int y = 0; y < 20; y++){
@@ -70,11 +75,13 @@ int main(){
 				}
 			}
 		}
+
 		//finaliza a rodada
 		printf("Rodada %d teve %d pontos...\n",z,pontuacao);
 		printf("Finalizando rodada : %d\n",z);
 	}
-	end = clock();
+
+	end = clock(); // Finaliza o relgio
 	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("%f Para a execucao do codigo!\n",cpu_time_used);
 	
